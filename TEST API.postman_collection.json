@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "1a4b2b47-75c5-4945-a21f-d6c64b118d7d",
+		"name": "TEST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Upload document",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "test_user1@example.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "lorem25#",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file_name",
+							"value": " test_doc",
+							"type": "text"
+						},
+						{
+							"key": "file_content",
+							"type": "file",
+							"src": "/home/adam/Desktop/test_document.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8010/api/v1/patients/1/document",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"v1",
+						"patients",
+						"1",
+						"document"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Negative",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file_name",
+									"value": " dfgfdg",
+									"type": "text"
+								},
+								{
+									"key": "file_content",
+									"type": "file",
+									"src": "/home/adam/Desktop/wniosek-o-wpis-w-ksiedze-wieczystej.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8010/api/v1/patients/1/document",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8010",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"1",
+								"document"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"message\": \"Validation failed\",\n    \"errors\": {\n        \"file_content\": [\n            \"The file content field is required.\"\n        ]\n    }\n}"
+				},
+				{
+					"name": "Posityve",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file_name",
+									"value": " test_doc",
+									"type": "text"
+								},
+								{
+									"key": "file_content",
+									"type": "file",
+									"src": "/home/adam/Desktop/test_document.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8010/api/v1/patients/1/document",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8010",
+							"path": [
+								"api",
+								"v1",
+								"patients",
+								"1",
+								"document"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"message\": \"Loading document in progress\",\n    \"check_status_url\": \"http://localhost:8010/api/v1/async-action-status/1\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get patients",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "test_user1@example.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "lorem25#",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/v1/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"v1",
+						"patients"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Positive",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8010/api/v1/patients",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8010",
+							"path": [
+								"api",
+								"v1",
+								"patients"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"patients\": [\n        {\n            \"id\": 1,\n            \"user_id\": 1,\n            \"name\": \"Jan\",\n            \"surname\": \"Kowalski\",\n            \"email\": \"test1@example.com\",\n            \"created_at\": \"2024-07-25T12:45:39.000000Z\",\n            \"updated_at\": \"2024-07-25T12:45:39.000000Z\",\n            \"documents\": []\n        },\n        {\n            \"id\": 2,\n            \"user_id\": 1,\n            \"name\": \"Adam\",\n            \"surname\": \"Nowak\",\n            \"email\": \"test2@example.com\",\n            \"created_at\": \"2024-07-25T12:45:39.000000Z\",\n            \"updated_at\": \"2024-07-25T12:45:39.000000Z\",\n            \"documents\": []\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Get async action status",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "test_user1@example.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "lorem25#",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/v1/async-action-status/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"v1",
+						"async-action-status",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Positive",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8010/api/v1/async-action-status/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8010",
+							"path": [
+								"api",
+								"v1",
+								"async-action-status",
+								"1"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"type\": \"upload_document\",\n    \"status\": \"success\",\n    \"created_at\": \"2024-07-25T13:02:07.000000Z\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Health check",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "test_user1@example.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "lorem25#",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8010/api/v1/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8010",
+					"path": [
+						"api",
+						"v1",
+						"health"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Positive",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8010/api/v1/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8010",
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"status\": \"OK\"\n}"
+				}
+			]
+		}
+	]
+}

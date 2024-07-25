@@ -1,0 +1,72 @@
+version: '3.3'
+
+networks:
+  test_api_docker:
+
+services:
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/local/nginx.dockerfile
+    container_name: test_api_container_nginx
+    depends_on:
+      - php
+      - mysql
+    ports:
+      - 8010:80
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - test_api_docker
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/local/php.dockerfile
+    container_name: test_api_container_php
+    volumes:
+        - ./src:/var/www/html
+    networks:
+      - test_api_docker
+
+  mysql:
+    image: mysql:5.7.32
+    container_name: test_api_container_mysql
+    ports:
+      - 4420:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: test_api
+      MYSQL_USER: test_api_user_db
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - test_api_docker
+
+  composer:
+    build:
+      context: .
+      dockerfile: docker/local/composer.dockerfile
+    container_name: test_api_container_composer
+    user: 'www-data'
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - test_api_docker
+
+  artisan:
+    build:
+      context: .
+      dockerfile: docker/local/php.dockerfile
+    container_name: test_api_container_artisan
+    user: 'www-data'
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan"]
+    networks:
+      - test_api_docker
+
