@@ -14,16 +14,12 @@ class UploadDocument implements ShouldQueue {
 
     use Queueable;
 
-    private string $fileName;
-    private string $fileContent;
-    private AsyncAction $asyncAction;
-    private Patient $patient;
-    public function __construct(string $fileName, string $fileContent, AsyncAction $asyncAction, Patient $patient) {
-        $this->fileName = $fileName;
-        $this->fileContent = $fileContent;
-        $this->asyncAction = $asyncAction;
-        $this->patient = $patient;
-    }
+    public function __construct(
+        private readonly string      $fileName,
+        private readonly string      $fileContent,
+        private readonly AsyncAction $asyncAction,
+        private readonly Patient     $patient,
+    ) {}
     public function handle(): void {
 
         $filePath = '/uploads/'.md5($this->fileName . microtime()).".pdf";

@@ -9,9 +9,10 @@ class HealthController
     public function getHealth() : JsonResponse {
 
         $data = [
-            'status' => 'OK',
+            'status' => "OK",
         ];
         return response()->json($data);
     }
 
 }
+
