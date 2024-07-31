@@ -1,3 +1,23 @@
+Example of simple laravel REST API based on Docker.
+
+Technical Requirements:
+- Docker
+- Laravel 11
+- MySQL
+- Unit tests
+
+Task Requirements:
+As a user (doctor), I want to be able to:
+
+- Add documents for a patient whose treatment I am managing
+- The document storage operation should be asynchronous
+- The document being added must be a PDF file no larger than a specified number of MB. By default, this should be 5MB, with the ability to configure it via an environment variable
+- The user (doctor) can manage documents only for their own patients
+
+Notes:
+There is no need to implement login and registration using bearer tokens. For the purposes of this task, use basic auth with the user's email and password. Only the implementation of patient document management is required. Sample records of patients and doctors should be provided in the submitted solution.
+
+
 HOW TO FIRE PROJECT LOCALLY:
 - clone repository from github
 - Use docker compose to set up project:
