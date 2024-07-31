@@ -8,10 +8,9 @@ class HealthController
 {
     public function getHealth() : JsonResponse {
 
-        $data = [
+        return response()->json([
             'status' => "OK",
-        ];
-        return response()->json($data);
+        ]);
     }
 
 }

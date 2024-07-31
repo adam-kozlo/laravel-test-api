@@ -2,59 +2,44 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\StoreDocument;
 use App\Jobs\UploadDocument;
 use App\Models\AsyncAction;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 class PatientsController {
 
     private User $user;
+
     public function __construct(Request $request) {
         $this->user = $request->attributes->get('authenticated_user');
     }
 
-    public function getPatients() : JsonResponse {
-        $data = [
-            'patients' => Patient::where('user_id', $this->user->id)
-                ->with('documents')
-                ->get(),
-        ];
-        return response()->json($data);
+    public function getPatients(): JsonResponse {
+
+        return response()->json([
+                'patients' => Patient::where('user_id', $this->user->id)
+                    ->with('documents')
+                    ->get(),
+            ]);
     }
 
-    public function postDocument(Patient $patient, Request $request): JsonResponse {
+    public function postDocument(Patient $patient, StoreDocument $storeDocument): JsonResponse {
 
-        $validator = Validator::make($request->all(), [
-            'file_name' => 'required',
-            'file_content' => 'required|file|mimes:pdf|max:'.config('upload.max_file_size_kb'),
+        $asyncAction = AsyncAction::create([
+            'user_id' => $this->user->id,
+            'type' => 'upload_document',
+            'status' => 'in_progress',
         ]);
 
-        if($validator->fails()) {
+        dispatch(new UploadDocument($storeDocument->file_name, base64_encode(file_get_contents($storeDocument->file('file_content'))), $asyncAction, $patient));
 
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
-        } else {
-
-            $asyncAction = AsyncAction::create([
-               'user_id' => $this->user->id,
-               'type' => 'upload_document',
-               'status' => 'in_progress',
-            ]);
-
-            dispatch(new UploadDocument($request->file_name, base64_encode(file_get_contents($request->file('file_content'))), $asyncAction, $patient));
-
-            $data = [
-                'message' => 'Loading document in progress',
-                'check_status_url' => route('async-action-status', ['asyncAction' => $asyncAction]),
-            ];
-            return response()->json($data, 201);
-        }
+        return response()->json([
+            'message' => 'Loading document in progress',
+            'check_status_url' => route('async-action-status', ['asyncAction' => $asyncAction]),
+        ], 201);
     }
-
-
 }

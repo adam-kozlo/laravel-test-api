@@ -16,6 +16,9 @@ pass:lorem26#
 - All API endpoints and examples can be found in enclosed to project Postman file. 
 - In .env file you can change UPLOAD_MAX_FILE_SIZE_KB, clear cache after that:
 docker-compose -f docker-compose.local.yml exec php php /var/www/html/artisan config:cache
+- Run unit tests:
+docker-compose -f docker-compose.local.yml exec php php /var/www/html/artisan test
+
 
 API DESCRIPTION:
 - GET http://localhost:8010/api/v1/health - gives information that api works
